@@ -1,0 +1,26 @@
+body {
+    background-color: #00d1b2;
+}
+h1 {
+    color: #fff;
+}
+h3 {
+    color: #fff;
+}
+table {
+    background-color: #fff;
+}
+.nav-tabs > li > a{
+    background-color: #e6e6e6;
+    border-radius: 10;
+    color: #555555;
+}
+.nav-tabs > li > a:hover{
+    background-color: #30a5e8;
+    border-radius: 10;
+    color:#fff;
+}
+.nav-tabs > li.active > a {
+    background-color: #fff;
+    color: #555555;
+}

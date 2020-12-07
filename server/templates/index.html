@@ -1,8 +1,14 @@
-<!DOCTYPE html>
-<html>
-    <head>
-    </head>
-    <body>
-        <h1>Smart Peephole</h1>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="columns">
+    <div class="column">
+        <figure class="image">
+            <img src="{{ url_for('static', filename='img/logo.svg') }}">
+        </figure>
+        <h1 class="home-page-text">
+            Peephole
+        </h1>
+    </div>
+</div>
+{% endblock %}

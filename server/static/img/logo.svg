@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1366 768" style="enable-background:new 0 0 1366 768;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);stroke:#FFFFFF;stroke-width:5;stroke-miterlimit:10;}
+	.st1{fill:url(#SVGID_2_);stroke:#FFFFFF;stroke-width:5;stroke-miterlimit:10;}
+	.st2{fill:#65B4CA;}
+	.st3{fill:#FFFFFF;stroke:#FFFFFF;stroke-miterlimit:10;}
+</style>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="692" y1="668.6115" x2="692" y2="507.2709">
+	<stop  offset="7.105755e-03" style="stop-color:#B3B3B3"/>
+	<stop  offset="0.2836" style="stop-color:#B1B1B1"/>
+	<stop  offset="0.4348" style="stop-color:#A9A9A9"/>
+	<stop  offset="0.5558" style="stop-color:#9B9B9B"/>
+	<stop  offset="0.6608" style="stop-color:#878787"/>
+	<stop  offset="0.7554" style="stop-color:#6E6E6E"/>
+	<stop  offset="0.8426" style="stop-color:#4F4F4F"/>
+	<stop  offset="0.9224" style="stop-color:#2B2B2B"/>
+	<stop  offset="0.9975" style="stop-color:#020202"/>
+	<stop  offset="1" style="stop-color:#000000"/>
+</linearGradient>
+<polygon class="st0" points="585.06,525.6 785.19,525.6 884,614.4 500,614.4 "/>
+<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="583.6797" y1="491.9862" x2="908.3746" y2="49.4225">
+	<stop  offset="7.105755e-03" style="stop-color:#B3B3B3"/>
+	<stop  offset="0.2836" style="stop-color:#B1B1B1"/>
+	<stop  offset="0.4348" style="stop-color:#A9A9A9"/>
+	<stop  offset="0.5558" style="stop-color:#9B9B9B"/>
+	<stop  offset="0.6608" style="stop-color:#878787"/>
+	<stop  offset="0.7554" style="stop-color:#6E6E6E"/>
+	<stop  offset="0.8426" style="stop-color:#4F4F4F"/>
+	<stop  offset="0.9224" style="stop-color:#2B2B2B"/>
+	<stop  offset="0.9975" style="stop-color:#020202"/>
+	<stop  offset="1" style="stop-color:#000000"/>
+</linearGradient>
+<ellipse class="st1" cx="683.4" cy="356.06" rx="230.9" ry="202.44"/>
+<ellipse class="st2" cx="688.5" cy="354.25" rx="127" ry="113.75"/>
+<circle class="st3" cx="731.5" cy="290.5" r="18.5"/>
+<circle class="st3" cx="768.5" cy="309" r="9"/>
+</svg>
