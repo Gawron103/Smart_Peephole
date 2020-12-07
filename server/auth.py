@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from . import db
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -27,6 +27,10 @@ def login_post():
 
     login_user(user, remember=remember)
 
+    # Check if user has admin rights
+    if user.superUser:
+        return redirect(url_for('admin.index'))
+
     return redirect(url_for('main.profile', user_name=user.name))
 
 @auth.route('/logout')
@@ -36,4 +40,4 @@ def logout():
     if session.get('was_once_logged_in'):
         del session['was_once_logged_in']
 
-    redirect(url_for('main.index'))
+    return redirect(url_for('main.index'))

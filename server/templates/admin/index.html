@@ -1,0 +1,28 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="section-content">
+            {% if current_user.is_authenticated and 
+                current_user.is_admin() %}
+            <h1 class="text-center pagination-centered">
+                Welcome admin
+            </h1>
+            <img src="{{ url_for('static', filename='img/admin_permission_granted.jpg') }}" class="img-responsive center-block" />
+            <h3 class="text-center pagination-centered">
+                Do what you want
+            </h3>
+            {% else %}
+            <h1 class="text-center pagination-centered">
+                    Only admin can do admin stuff
+            </h1>
+            <img src="{{ url_for('static', filename='img/admin_no_permission.jpg') }}" class="img-responsive center-block" />
+            <h3 class="text-center pagination-centered">
+                go away
+            </h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
