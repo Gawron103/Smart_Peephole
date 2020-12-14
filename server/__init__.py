@@ -50,6 +50,10 @@ def create_app():
     admin.add_link(LogoutMenuLink(name='Logout', category='', url="/logout"))
     admin.add_link(LoginMenuLink(name='Login', category='', url="/login"))
 
+    from .main import page_forbidden, page_not_found
+    app.register_error_handler(403, page_forbidden)
+    app.register_error_handler(404, page_not_found)
+
     # Blueprint for auth routes
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
