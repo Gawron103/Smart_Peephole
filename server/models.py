@@ -7,6 +7,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100))
     password = db.Column(db.String(100))
     superUser = db.Column(db.Boolean, default=False)
+    detectionState = db.Column(db.Boolean, default=False)
 
     def is_admin(self):
         return self.superUser

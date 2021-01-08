@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, session, request
+from flask import Blueprint, render_template, redirect, url_for, session, request, flash
 from flask_login import login_user, logout_user
 from . import db
 from .models import User
@@ -41,3 +41,4 @@ def logout():
         del session['was_once_logged_in']
 
     return redirect(url_for('main.index'))
+    
