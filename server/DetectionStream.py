@@ -9,6 +9,7 @@ class DetectionStream:
     def __init__(self, framesQue):
         self.frames = framesQue
         self.currentFrame = None
+        self.lastGivenFrameTime = None
         self.faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
         self.thread = Thread(target=self.threadFunc)
@@ -28,12 +29,20 @@ class DetectionStream:
 
         while True:
             frame = self.frames.get()
+            if frame is not None:
+                self.lastGivenFrameTime = time()
+
             self.currentFrame = self.detectFace(frame)
+
+            if time() - self.lastGivenFrameTime > 5:
+                print('5 sec elapsed and detection stream client didnt get any frames')
+                break
 
         self.thread = None
         print('DetectionStream thread set to none')
 
     def getFrame(self):
+        Camera.detectionStreamLogTime(time())
         return self.currentFrame
 
     def detectFace(self, inputImg):
