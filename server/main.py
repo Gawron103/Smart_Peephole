@@ -7,6 +7,8 @@ from .StreamEvent import StreamEvent
 from .Camera import Camera
 from .NormalStream import NormalStream
 from .DetectionStream import DetectionStream
+from .FPSMeter import FPSMeter
+from .LabelCreator import LabelCreator
 from .models import User
 from . import db
 
@@ -39,7 +41,7 @@ def video_stream():
     global camera
     global streamEvent
     camera.startThread()
-    return Response(gen(NormalStream(streamEvent, normalFrames)),
+    return Response(gen(NormalStream(streamEvent, normalFrames, FPSMeter(), LabelCreator(cv2.FONT_HERSHEY_SIMPLEX))),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @main.route('/video_detection_stream/')
@@ -51,7 +53,7 @@ def video_detection_stream():
     global camera
     global streamEvent
     camera.startThread()
-    return Response(gen(DetectionStream(streamEvent, detectionFrames)),
+    return Response(gen(DetectionStream(streamEvent, detectionFrames, FPSMeter(), LabelCreator(cv2.FONT_HERSHEY_SIMPLEX))),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @main.route('/detection')

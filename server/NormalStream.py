@@ -1,21 +1,24 @@
 from threading import Thread
 from time import time, sleep
-from datetime import datetime
 
 from .Camera import Camera
+from .FPSMeter import FPSMeter
+from .LabelCreator import LabelCreator
 
 import cv2
 
 class NormalStream:
-    def __init__(self, streamEvent, framesQue):
+    def __init__(self, streamEvent, framesQue, fpsMeter, labelCreator):
         self.frames = framesQue
         self.currentFrame = None
         self.lastGivenFrameTime = None
         self.event = streamEvent
+        self.fpsMeter = fpsMeter
+        self.labelCreator = labelCreator
 
-        self.font = cv2.FONT_HERSHEY_SIMPLEX
-        self.newFrameTime = 0
-        self.prevFrameTime = 0
+        # self.font = cv2.FONT_HERSHEY_SIMPLEX
+        # self.newFrameTime = 0
+        # self.prevFrameTime = 0
 
         self.thread = Thread(target=self.threadFunc)
         self.thread.start()
@@ -39,12 +42,12 @@ class NormalStream:
             # else:
                 # print(f'time not logged')
                 # print(f'Current time difference: {time() - self.lastGivenFrameTime}')
-
-                fps = self.calculateFPS()
-                currentData = datetime.now()
-                time = currentData.strftime("%d/%m/%Y %H:%M:%S")
-                info = "".join([time, ' ', 'FPS:', ' ', fps])
-                frame = cv2.putText(frame, info, (7, 30), self.font, 1, (100, 255, 0), 1, cv2.LINE_AA)
+                # print('Before getting current time')
+                # print('After getting current time')
+                fps = self.fpsMeter.calculateFPS(time())
+                frame = self.labelCreator.addLabelToFrame(frame, fps)
+                
+                # frame = cv2.putText(frame, label, (7, 30), self.font, 1, (100, 255, 0), 1, cv2.LINE_AA)
 
                 self.currentFrame = cv2.imencode('.jpg', frame)[1].tobytes()
 

@@ -2,15 +2,19 @@ from threading import Thread
 from time import time, sleep
 
 from .Camera import Camera
+from .FPSMeter import FPSMeter
+from .LabelCreator import LabelCreator
 
 import cv2
 
 class DetectionStream:
-    def __init__(self, streamEvent, framesQue):
+    def __init__(self, streamEvent, framesQue, fpsMeter, labelCreator):
         self.frames = framesQue
         self.currentFrame = None
         self.lastGivenFrameTime = None
         self.event = streamEvent
+        self.fpsMeter = fpsMeter
+        self.labelCreator = labelCreator
         self.faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
         self.thread = Thread(target=self.threadFunc)
@@ -37,7 +41,13 @@ class DetectionStream:
                 # self.lastGivenFrameTime = time()
 
                 if frameCounter % frameSkipFactor == 0:
-                    self.currentFrame = self.detectFace(frame)
+                    processedFrame = self.detectFace(frame)
+                    
+                    fps = self.fpsMeter.calculateFPS(time())
+                    frame = self.labelCreator.addLabelToFrame(processedFrame, fps)
+
+                    # self.currentFrame = frame
+                    self.currentFrame = cv2.imencode('.jpg', frame)[1].tobytes()
                 # else:
                 #     print('ignoring frames')
 
@@ -67,6 +77,7 @@ class DetectionStream:
         for (x, y, w, h) in faces:
             cv2.rectangle(inputImg, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
-        retImg = cv2.imencode('.jpg', inputImg)[1].tobytes()
+        # retImg = cv2.imencode('.jpg', inputImg)[1].tobytes()
 
-        return retImg if retImg is not None else inputImg
+        return inputImg
+        # return retImg if retImg is not None else inputImg
