@@ -41,4 +41,3 @@ def logout():
         del session['was_once_logged_in']
 
     return redirect(url_for('main.index'))
-    

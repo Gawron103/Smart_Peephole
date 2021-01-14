@@ -2,8 +2,6 @@ from threading import Thread
 from time import time, sleep
 
 from .Camera import Camera
-from .FPSMeter import FPSMeter
-from .LabelCreator import LabelCreator
 
 import cv2
 
@@ -37,8 +35,6 @@ class DetectionStream:
         while True:
             try:
                 frame = self.frames.get(timeout=2)
-            # if frame is not None:
-                # self.lastGivenFrameTime = time()
 
                 if frameCounter % frameSkipFactor == 0:
                     processedFrame = self.detectFace(frame)
@@ -46,16 +42,9 @@ class DetectionStream:
                     fps = self.fpsMeter.calculateFPS(time())
                     frame = self.labelCreator.addLabelToFrame(processedFrame, fps)
 
-                    # self.currentFrame = frame
                     self.currentFrame = cv2.imencode('.jpg', frame)[1].tobytes()
-                # else:
-                #     print('ignoring frames')
 
                 frameCounter+=1
-
-            # if time() - self.lastGivenFrameTime > 2:
-            #     print('2 sec elapsed and detection stream client didnt get any frames')
-            #     break
             except:
                 print('2 sec elapsed and detection stream client didnt get any frames')
                 break
@@ -77,7 +66,4 @@ class DetectionStream:
         for (x, y, w, h) in faces:
             cv2.rectangle(inputImg, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
-        # retImg = cv2.imencode('.jpg', inputImg)[1].tobytes()
-
         return inputImg
-        # return retImg if retImg is not None else inputImg

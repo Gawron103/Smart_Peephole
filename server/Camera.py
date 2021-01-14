@@ -15,7 +15,6 @@ class Camera:
         self.detectionFrames = detectionFramesQue
         self.camera = cam
         self.event = streamEvent
-        # self.lastGainedPhoto = None
 
     def startThread(self):
         if not self.thread:
@@ -35,11 +34,9 @@ class Camera:
             while True:
                 _, img = self.camera.read()
                 img = cv2.resize(img, (640, 480))
-                # sleep(0.1)
                 yield img
 
     def getFrame(self):
-        # self.lastGainedPhoto = time()
         return self.currentFrame
 
     def threadFunc(self):
