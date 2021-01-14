@@ -6,10 +6,11 @@ from .Camera import Camera
 import cv2
 
 class DetectionStream:
-    def __init__(self, framesQue):
+    def __init__(self, streamEvent, framesQue):
         self.frames = framesQue
         self.currentFrame = None
         self.lastGivenFrameTime = None
+        self.event = streamEvent
         self.faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
         self.thread = Thread(target=self.threadFunc)
@@ -26,16 +27,27 @@ class DetectionStream:
 
     def threadFunc(self):
         print('Starting DetectionStream thread func')
+        frameSkipFactor = 3
+        frameCounter = 0
 
         while True:
-            frame = self.frames.get()
-            if frame is not None:
-                self.lastGivenFrameTime = time()
+            try:
+                frame = self.frames.get(timeout=2)
+            # if frame is not None:
+                # self.lastGivenFrameTime = time()
 
-            self.currentFrame = self.detectFace(frame)
+                if frameCounter % frameSkipFactor == 0:
+                    self.currentFrame = self.detectFace(frame)
+                # else:
+                #     print('ignoring frames')
 
-            if time() - self.lastGivenFrameTime > 5:
-                print('5 sec elapsed and detection stream client didnt get any frames')
+                frameCounter+=1
+
+            # if time() - self.lastGivenFrameTime > 2:
+            #     print('2 sec elapsed and detection stream client didnt get any frames')
+            #     break
+            except:
+                print('2 sec elapsed and detection stream client didnt get any frames')
                 break
 
         self.thread = None
@@ -43,12 +55,14 @@ class DetectionStream:
 
     def getFrame(self):
         Camera.detectionStreamLogTime(time())
+        self.event.wait()
+        self.event.clear()
         return self.currentFrame
 
     def detectFace(self, inputImg):
         grayImg = cv2.cvtColor(inputImg, cv2.COLOR_BGR2GRAY)
 
-        faces = self.faceCascade.detectMultiScale(grayImg, 1.4, 4)
+        faces = self.faceCascade.detectMultiScale(grayImg, 1.5, 4)
 
         for (x, y, w, h) in faces:
             cv2.rectangle(inputImg, (x, y), (x + w, y + h), (255, 0, 0), 2)

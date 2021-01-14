@@ -8,13 +8,14 @@ class Camera:
     normalStreamLastAccess = None
     detectionStreamLastAccess = None
 
-    def __init__(self, cam, normalFramesQue, detectionFramesQue):
+    def __init__(self, cam, streamEvent, normalFramesQue, detectionFramesQue):
         self.thread = None
         self.currentFrame = None
         self.normalFrames = normalFramesQue
         self.detectionFrames = detectionFramesQue
         self.camera = cam
-        self.lastGainedPhoto = None
+        self.event = streamEvent
+        # self.lastGainedPhoto = None
 
     def startThread(self):
         if not self.thread:
@@ -22,7 +23,7 @@ class Camera:
             self.thread.start()
 
             # Wait untill frames are available
-            while self.getFrame() is None:
+            while self.currentFrame is None:
                 sleep(0)
 
             print('Camera thread started')
@@ -33,35 +34,39 @@ class Camera:
         if self.camera.isOpened():
             while True:
                 _, img = self.camera.read()
+                img = cv2.resize(img, (640, 480))
+                # sleep(0.1)
                 yield img
 
     def getFrame(self):
-        self.lastGainedPhoto = time()
+        # self.lastGainedPhoto = time()
         return self.currentFrame
 
     def threadFunc(self):
         print('Starting NewCamera thread func')
+
         streamsStates = {'NormalStream' : None, 'DetectionStream' : None}
         framesIterator = self.captureFrames()
 
         for frame in framesIterator:
             self.currentFrame = frame
+            self.event.set()
 
             if Camera.normalStreamLastAccess is not None:
-                if time() - Camera.normalStreamLastAccess < 5:
+                if time() - Camera.normalStreamLastAccess < 3:
                     self.normalFrames.put(deepcopy(frame))
                     streamsStates['NormalStream'] = True
                 else:
-                    print('5 sec elapsed. Normal stream client gone')
+                    print('2 sec elapsed. Normal stream client gone')
                     Camera.normalStreamLastAccess = None
                     streamsStates['NormalStream'] = False
 
             if Camera.detectionStreamLastAccess is not None:
-                if time() - Camera.detectionStreamLastAccess < 5:
+                if time() - Camera.detectionStreamLastAccess < 3:
                     self.detectionFrames.put(deepcopy(frame))
                     streamsStates['DetectionStream'] = True
                 else:
-                    print('5 sec elapsed. Detection stream client gone')
+                    print('2 sec elapsed. Detection stream client gone')
                     Camera.detectionStreamLastAccess = None
                     streamsStates['DetectionStream'] = False
 

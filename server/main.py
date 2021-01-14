@@ -3,6 +3,7 @@ from flask_login import current_user
 
 from queue import Queue
 
+from .StreamEvent import StreamEvent
 from .Camera import Camera
 from .NormalStream import NormalStream
 from .DetectionStream import DetectionStream
@@ -15,7 +16,8 @@ main = Blueprint('main', __name__)
 
 normalFrames = Queue()
 detectionFrames = Queue()
-camera = Camera(cv2.VideoCapture(0), normalFrames, detectionFrames)
+streamEvent = StreamEvent()
+camera = Camera(cv2.VideoCapture(0), streamEvent, normalFrames, detectionFrames)
 
 @main.route('/')
 def index():
@@ -35,8 +37,9 @@ def video_stream():
     
     global normalFrames
     global camera
+    global streamEvent
     camera.startThread()
-    return Response(gen(NormalStream(normalFrames)),
+    return Response(gen(NormalStream(streamEvent, normalFrames)),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @main.route('/video_detection_stream/')
@@ -46,8 +49,9 @@ def video_detection_stream():
 
     global detectionFrames
     global camera
+    global streamEvent
     camera.startThread()
-    return Response(gen(DetectionStream(detectionFrames)),
+    return Response(gen(DetectionStream(streamEvent, detectionFrames)),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @main.route('/detection')
