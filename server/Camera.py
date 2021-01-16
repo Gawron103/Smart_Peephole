@@ -2,6 +2,8 @@ from threading import Thread
 from time import time, sleep
 from copy import deepcopy
 
+from .CameraState import CameraState
+
 import cv2
 
 class Camera:
@@ -42,7 +44,11 @@ class Camera:
     def threadFunc(self):
         print('Starting NewCamera thread func')
 
-        streamsStates = {'NormalStream' : None, 'DetectionStream' : None}
+        streamsStates = {
+            'NormalStream' : CameraState.NEVER_CONNECTED,
+            'DetectionStream' : CameraState.NEVER_CONNECTED
+        }
+
         framesIterator = self.captureFrames()
 
         for frame in framesIterator:
@@ -52,24 +58,26 @@ class Camera:
             if Camera.normalStreamLastAccess is not None:
                 if time() - Camera.normalStreamLastAccess < 3:
                     self.normalFrames.put(deepcopy(frame))
-                    streamsStates['NormalStream'] = True
+                    streamsStates['NormalStream'] = CameraState.CONNECTED
                 else:
                     print('2 sec elapsed. Normal stream client gone')
                     Camera.normalStreamLastAccess = None
-                    streamsStates['NormalStream'] = False
+                    streamsStates['NormalStream'] = CameraState.DISCONNECTED
 
             if Camera.detectionStreamLastAccess is not None:
                 if time() - Camera.detectionStreamLastAccess < 3:
                     self.detectionFrames.put(deepcopy(frame))
-                    streamsStates['DetectionStream'] = True
+                    streamsStates['DetectionStream'] = CameraState.CONNECTED
                 else:
                     print('2 sec elapsed. Detection stream client gone')
                     Camera.detectionStreamLastAccess = None
-                    streamsStates['DetectionStream'] = False
+                    streamsStates['DetectionStream'] = CameraState.DISCONNECTED
 
-            if all(value == False for value in streamsStates.values()):
-                print('No clients connected. Dont need to read new frames')
-                break
+            if any(value == CameraState.DISCONNECTED for value in streamsStates.values()) and \
+               all(value != CameraState.CONNECTED for value in streamsStates.values()):
+                  print(f'Dict values: {streamsStates.values()}')
+                  print('No clients connected. Dont need to read new frames')
+                  break
 
         self.thread = None
         self.normalFrames.queue.clear()
