@@ -1,19 +1,22 @@
-from flask import Blueprint, render_template, redirect, url_for, session, request, flash
+from flask import Blueprint, render_template, redirect, \
+    url_for, session, request, flash
 from flask_login import login_user, logout_user
-from . import db
+
+from werkzeug.security import check_password_hash
+
 from .models import User
-from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint('auth', __name__)
+
 
 @auth.route('/login')
 def login():
     return render_template('login.html')
 
+
 @auth.route('/login', methods=['POST'])
 def login_post():
     email = request.form.get('email')
-    name = request.form.get('name')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
@@ -32,6 +35,7 @@ def login_post():
         return redirect(url_for('admin.index'))
 
     return redirect(url_for('main.profile', user_name=user.name))
+
 
 @auth.route('/logout')
 def logout():

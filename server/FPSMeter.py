@@ -1,10 +1,10 @@
 class FPSMeter:
     def __init__(self):
-        self.newFrameTime = 0
-        self.prevFrameTime = 0
+        self.__newFrameTime = 0
+        self.__prevFrameTime = 0
 
-    def calculateFPS(self, frameTime):
-        self.newFrameTime = frameTime
-        fps = 1 / (self.newFrameTime - self.prevFrameTime)
-        self.prevFrameTime = self.newFrameTime
+    def calculate_fps(self, frame_time):
+        self.__newFrameTime = frame_time
+        fps = 1 / (self.__newFrameTime - self.__prevFrameTime)
+        self.__prevFrameTime = self.__newFrameTime
         return str(int(fps))

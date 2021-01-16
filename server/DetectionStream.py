@@ -1,69 +1,55 @@
 from threading import Thread
 from time import time, sleep
 
-from .Camera import Camera
+from .CameraHandler import CameraHandler
 
 import cv2
 
-class DetectionStream:
-    def __init__(self, streamEvent, framesQue, fpsMeter, labelCreator):
-        self.frames = framesQue
-        self.currentFrame = None
-        self.lastGivenFrameTime = None
-        self.event = streamEvent
-        self.fpsMeter = fpsMeter
-        self.labelCreator = labelCreator
-        self.faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-        self.thread = Thread(target=self.threadFunc)
-        self.thread.start()
+class DetectionStream:
+    def __init__(self, streamEvent, frames, fpsMeter, labelCreator, detector):
+        self.__readyImg = None
+        self.__frames = frames
+        self.__event = streamEvent
+        self.__fpsMeter = fpsMeter
+        self.__labelCreator = labelCreator
+        self.__detector = detector
+
+        self.__processing_thread = Thread(target=self.__img_processing)
+        self.__processing_thread.start()
 
         # Wait until frames are available
-        while self.getFrame() is None:
+        while self.get_frame() is None:
             sleep(0)
 
-        print('DetectionStream init finished')
-
-    def __del__(self):
-        print('Detection Stream object deleted')
-
-    def threadFunc(self):
+    def __img_processing(self):
         print('Starting DetectionStream thread func')
-        frameSkipFactor = 3
-        frameCounter = 0
+
+        frame_skip_factor = 3
+        frame_counter = 0
 
         while True:
             try:
-                frame = self.frames.get(timeout=2)
+                img = self.__frames.get(timeout=2)
 
-                if frameCounter % frameSkipFactor == 0:
-                    processedFrame = self.detectFace(frame)
-                    
-                    fps = self.fpsMeter.calculateFPS(time())
-                    frame = self.labelCreator.addLabelToFrame(processedFrame, fps)
+                if frame_counter % frame_skip_factor == 0:
+                    processed_img = self.__detector.detect_face(img)
 
-                    self.currentFrame = cv2.imencode('.jpg', frame)[1].tobytes()
+                    fps = self.__fpsMeter.calculate_fps(time())
+                    img = self.__labelCreator.apply_label(processed_img, fps)
 
-                frameCounter+=1
-            except:
-                print('2 sec elapsed and detection stream client didnt get any frames')
+                    self.__readyImg = cv2.imencode('.jpg', img)[1].tobytes()
+
+                frame_counter += 1
+            except Exception as error:
+                print(f'Detection stream error: {repr(error)}')
                 break
 
-        self.thread = None
+        self.__processing_thread = None
         print('DetectionStream thread set to none')
 
-    def getFrame(self):
-        Camera.detectionStreamLogTime(time())
-        self.event.wait()
-        self.event.clear()
-        return self.currentFrame
-
-    def detectFace(self, inputImg):
-        grayImg = cv2.cvtColor(inputImg, cv2.COLOR_BGR2GRAY)
-
-        faces = self.faceCascade.detectMultiScale(grayImg, 1.5, 4)
-
-        for (x, y, w, h) in faces:
-            cv2.rectangle(inputImg, (x, y), (x + w, y + h), (255, 0, 0), 2)
-
-        return inputImg
+    def get_frame(self):
+        CameraHandler.detection_stream_log_time(time())
+        self.__event.wait()
+        self.__event.clear()
+        return self.__readyImg

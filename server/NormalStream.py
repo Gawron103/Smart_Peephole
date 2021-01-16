@@ -1,51 +1,47 @@
 from threading import Thread
 from time import time, sleep
 
-from .Camera import Camera
+from .CameraHandler import CameraHandler
 
 import cv2
 
+
 class NormalStream:
-    def __init__(self, streamEvent, framesQue, fpsMeter, labelCreator):
-        self.frames = framesQue
-        self.currentFrame = None
-        self.lastGivenFrameTime = None
-        self.event = streamEvent
-        self.fpsMeter = fpsMeter
-        self.labelCreator = labelCreator
+    def __init__(self, streamEvent, frames, fpsMeter, labelCreator):
+        self.__readyImg = None
+        self.__frames = frames
+        self.__event = streamEvent
+        self.__fpsMeter = fpsMeter
+        self.__labelCreator = labelCreator
 
-        self.thread = Thread(target=self.threadFunc)
-        self.thread.start()
+        self.__processing_thread = Thread(target=self.__img_processing)
+        self.__processing_thread.start()
 
-        while not self.getFrame():
+        # Waint until frames are available
+        while not self.get_frame():
             sleep(0)
 
-        print('NormalStream init finished')
-
-    def __del__(self):
-        print('Normal Stream object deleted')
-
-    def threadFunc(self):
-        print('Starting NormalStream thread func')
+    def __img_processing(self):
+        print('Starting NormalStream img processing')
 
         while True:
             try:
-                frame = self.frames.get(timeout=2)
-        
-                fps = self.fpsMeter.calculateFPS(time())
-                frame = self.labelCreator.addLabelToFrame(frame, fps)
+                img = self.__frames.get(timeout=2)
 
-                self.currentFrame = cv2.imencode('.jpg', frame)[1].tobytes()
+                fps = self.__fpsMeter.calculate_fps(time())
+                img = self.__labelCreator.apply_label(img, fps)
 
-            except:
-                print('2 sec elapsed and normal stream didnt get any frame')
+                self.__readyImg = cv2.imencode('.jpg', img)[1].tobytes()
+
+            except Exception as error:
+                print(f'Detection stream error: {repr(error)}')
                 break
 
-        self.thread = None
-        print('NormalStream thread set to none')
+        self.__processing_thread = None
+        print('NormalStream img processing ended')
 
-    def getFrame(self):
-        Camera.normalStreamLogTime(time())
-        self.event.wait()
-        self.event.clear()
-        return self.currentFrame
+    def get_frame(self):
+        CameraHandler.normal_stream_log_time(time())
+        self.__event.wait()
+        self.__event.clear()
+        return self.__readyImg

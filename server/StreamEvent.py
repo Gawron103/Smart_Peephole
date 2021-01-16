@@ -1,21 +1,22 @@
 from threading import Event, get_ident
 from time import time
 
+
 class StreamEvent:
     def __init__(self):
-        self.events = {}
+        self.__events = {}
 
     def clear(self):
         ident = get_ident()
 
-        if ident in self.events:
-            self.events[get_ident()][0].clear()
+        if ident in self.__events:
+            self.__events[get_ident()][0].clear()
 
     def set(self):
         now = time()
         remove = None
 
-        for ident, event in self.events.items():
+        for ident, event in self.__events.items():
             if not event[0].isSet():
                 event[0].set()
                 event[1] = now
@@ -24,12 +25,12 @@ class StreamEvent:
                     remove = ident
 
         if remove:
-            del self.events[ident]
+            del self.__events[ident]
 
     def wait(self):
         ident = get_ident()
 
-        if ident not in self.events:
-            self.events[ident] = [Event(), time()]
+        if ident not in self.__events:
+            self.__events[ident] = [Event(), time()]
 
-        return self.events[ident][0].wait()
+        return self.__events[ident][0].wait()
