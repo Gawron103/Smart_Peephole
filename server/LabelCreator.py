@@ -13,11 +13,18 @@ class LabelCreator:
 
     def apply_label(self, frame, fps):
         label = self.__create_label(fps)
-        return cv2.putText(frame,
-                           label,
-                           (7, 30),
-                           self.__font,
-                           1,
-                           (100, 255, 0),
-                           1,
-                           cv2.cv2.LINE_AA)
+        cords = (10, 25)
+        font_scale = 0.6
+        color = (100, 255, 0)
+        thickness = 1
+
+        return cv2.putText(
+            frame,
+            label,
+            cords,
+            self.__font,
+            font_scale,
+            color,
+            thickness,
+            cv2.cv2.LINE_AA
+        )
