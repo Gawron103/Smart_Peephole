@@ -1,25 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container has-text-centered">
-    <h1>
-        Hello {{ current_user.name }}
-    </h1>
-    {% if not current_user.detectionState %}
-    <figure class="image">
-        <img src="{{ url_for('main.video_stream') }}">
-    </figure>
-    {% endif %}
-    {% if current_user.detectionState %}
-    <figure class="image">
-        <img src="{{ url_for('main.video_detection_stream') }}">
-    </figure>
-    {% endif %}
-    <h1>
-        Live stream from camera
-    </h1>
-    <form action="detection">
-        <button type="submit">Enable/Disable detection state</button>
-    </form>
+<div class="columns is-multiline is-vcentered has-text-centered">
+    <div class="column is-full is-full-mobile">
+        <h1 class="title has-text-white">Hello {{ current_user.name }}</h1>
+    </div>
+    <div class="column is-full is-full-mobile">
+        <figure class="image">
+            {% if not current_user.detectionState %}
+            <img src="{{ url_for('main.video_stream') }}">
+            {% endif %}
+            {% if current_user.detectionState %}
+            <img src="{{ url_for('main.video_detection_stream') }}">
+            {% endif %}
+        </figure>
+    </div>
+    <div class="column is-full is-full-mobile">
+        {% if not current_user.detectionState %}
+        <h1 class="title has-text-white">Detection state: Off</p>
+        {% endif %}
+        {% if current_user.detectionState %}
+        <h1 class="title has-text-white">Detection state: On</p>
+        {% endif %}
+    </div>
+    <div class="column is-full is-full-mobile">
+        <form action="detection">
+            <button class="button is-info" type="submit">Enable/Disable detection state</button>
+        </form>
+    </div>
 </div>
 {% endblock %}

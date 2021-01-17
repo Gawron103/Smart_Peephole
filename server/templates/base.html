@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_base.css')}}?version=2" />
 </head>
 <body>
-    <nav class="navbar is-dark">
+    <nav class="navbar is-info">
         <div class="navbar-brand">
             <a class="navbar-item">
                 <img src="{{ url_for('static', filename='img/navbar_logo.svg') }}" class="img-responsive">
             </a>
-            <span class="navbar-item has-text-primary">Peephole</span>
+            <span class="navbar-item has-text-white has-text-weight-bold">Smart Peephole</span>
             <span class="navbar-burger burger" data-target="navMenu">
                 <span></span>
                 <span></span>
@@ -35,7 +35,7 @@
             </div>
         </div>
     </nav>
-    <section class="hero is-primary is-fullheight-with-navbar is-mobile">
+    <section class="hero is-fullheight-with-navbar has-background-grey-lighter">
         <div class="hero-body">
             <div class="container has-text-centered">
                 {% block content %}
@@ -43,6 +43,16 @@
             </div>
         </div>
     </section>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong> Smart Peephole</strong> by <strong>Piotr Gawronski</strong>
+            </p>
+            <p>
+                ©2021 <a href="https://github.com/Gawron103">Check author's GIT</a>
+            </p>
+        </div>
+    </footer>
     <script type="text/javascript">
         (function() {
             var burger = document.querySelector('.burger');

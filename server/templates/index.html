@@ -1,14 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="columns">
-    <div class="column">
+<div class="columns is-multiline is-vcentered">
+    <div class="column is-one-quater is-full-mobile">
+        <h1 class="is-size-2-mobile is-size-1-desktop title has-text-white">Smart Peephole</h1>
+    </div>
+    <div class="column is-half is-full-mobile">
         <figure class="image">
             <img src="{{ url_for('static', filename='img/logo.svg') }}">
         </figure>
-        <h1 class="home-page-text">
-            Peephole
-        </h1>
+    </div>
+    <div class="column is-one-quater is-full-mobile">
+        <p class="is-size-4-mobile is-size-4 has-text-white has-text-weight-bold">Always know who is</p>
+        <p class="is-size-4-mobile is-size-4 has-text-white has-text-weight-bold">in standing at your door!</p>
     </div>
 </div>
 {% endblock %}
