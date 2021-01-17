@@ -13,20 +13,23 @@ class NormalStream:
         self.__event = streamEvent
         self.__fpsMeter = fpsMeter
         self.__labelCreator = labelCreator
+        self.__processing_thread = None
 
-        self.__processing_thread = Thread(target=self.__img_processing)
-        self.__processing_thread.start()
+    def start_thread(self):
+        if not self.__processing_thread:
+            self.__processing_thread = Thread(target=self.__img_processing)
+            self.__processing_thread.start()
 
-        # Waint until frames are available
-        while not self.get_frame():
-            sleep(0)
+            # Waint until frames are available
+            while not self.get_frame():
+                sleep(0)
 
     def __img_processing(self):
         print('Starting NormalStream img processing')
 
         while True:
             try:
-                img = self.__frames.get(timeout=2)
+                img = self.__frames.get(timeout=3)
 
                 fps = self.__fpsMeter.calculate_fps(time())
                 img = self.__labelCreator.apply_label(img, fps)

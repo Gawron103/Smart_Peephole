@@ -24,7 +24,7 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    from .models import User
+    from .Models import User
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -66,7 +66,7 @@ def create_app():
     app.register_error_handler(404, page_not_found)
 
     # Blueprint for auth routes
-    from .auth import auth as auth_blueprint
+    from .Auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
     # Blueprint for non auth parts of app

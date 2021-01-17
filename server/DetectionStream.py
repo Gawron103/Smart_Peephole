@@ -14,13 +14,16 @@ class DetectionStream:
         self.__fpsMeter = fpsMeter
         self.__labelCreator = labelCreator
         self.__detector = detector
+        self.__processing_thread = None
 
-        self.__processing_thread = Thread(target=self.__img_processing)
-        self.__processing_thread.start()
+    def start_thread(self):
+        if not self.__processing_thread:
+            self.__processing_thread = Thread(target=self.__img_processing)
+            self.__processing_thread.start()
 
-        # Wait until frames are available
-        while self.get_frame() is None:
-            sleep(0)
+            # Wait until frames are available
+            while self.get_frame() is None:
+                sleep(0)
 
     def __img_processing(self):
         print('Starting DetectionStream thread func')
@@ -30,7 +33,7 @@ class DetectionStream:
 
         while True:
             try:
-                img = self.__frames.get(timeout=2)
+                img = self.__frames.get(timeout=3)
 
                 if frame_counter % frame_skip_factor == 0:
                     processed_img = self.__detector.detect_face(img)

@@ -2,31 +2,11 @@ from flask import render_template, Blueprint, Response, \
     url_for, abort, redirect
 from flask_login import current_user
 
-from queue import Queue
-
-from .StreamEvent import StreamEvent
-from .CameraHandler import CameraHandler
-from .NormalStream import NormalStream
-from .DetectionStream import DetectionStream
-from .FPSMeter import FPSMeter
-from .LabelCreator import LabelCreator
-from .FaceDetector import FaceDetector
-from .models import User
 from . import db
-
-import cv2
+from .Models import User
+from .Config import cam, normal_stream, detection_stream
 
 main = Blueprint('main', __name__)
-
-normal_frames = Queue()
-detection_frames = Queue()
-stream_event = StreamEvent()
-cam = CameraHandler(
-                    cv2.VideoCapture(0),
-                    stream_event,
-                    normal_frames,
-                    detection_frames
-                )
 
 
 @main.route('/')
@@ -47,21 +27,12 @@ def video_stream():
     if not current_user.is_authenticated:
         abort(403)
 
-    cam.start_thread()
-
     mimetype = 'multipart/x-mixed-replace; boundary=frame'
-    response = gen(
-        NormalStream(
-            stream_event,
-            normal_frames,
-            FPSMeter(),
-            LabelCreator(
-                cv2.FONT_HERSHEY_SIMPLEX
-            )
-        )
-    )
 
-    return Response(response=response, mimetype=mimetype)
+    cam.start_thread()
+    normal_stream.start_thread()
+
+    return Response(response=gen(normal_stream), mimetype=mimetype)
 
 
 @main.route('/video_detection_stream/')
@@ -69,27 +40,12 @@ def video_detection_stream():
     if not current_user.is_authenticated:
         abort(403)
 
-    cam.start_thread()
-
-    face_cascade = 'haarcascade_frontalface_default.xml'
     mimetype = 'multipart/x-mixed-replace; boundary=frame'
-    response = gen(
-        DetectionStream(
-            stream_event,
-            detection_frames,
-            FPSMeter(),
-            LabelCreator(
-                cv2.FONT_HERSHEY_SIMPLEX
-            ),
-            FaceDetector(
-                cv2.CascadeClassifier(
-                    cv2.data.haarcascades + face_cascade
-                )
-            )
-        )
-    )
 
-    return Response(response=response, mimetype=mimetype)
+    cam.start_thread()
+    detection_stream.start_thread()
+
+    return Response(response=gen(detection_stream), mimetype=mimetype)
 
 
 @main.route('/detection')

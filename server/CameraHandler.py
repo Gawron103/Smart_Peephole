@@ -51,7 +51,7 @@ class CameraHandler:
 
             if CameraHandler.normal_stream_last_access is not None:
                 if time() - CameraHandler.normal_stream_last_access < 2:
-                    self.__normalFrames.put(img)
+                    self.__normalFrames.put(deepcopy(img))
                     streams['NormalStream'] = StreamStatus.ONLINE
                 else:
                     print('Normal stream client disconnected')
