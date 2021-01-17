@@ -1,11 +1,5 @@
 body {
-    background-color: #00d1b2;
-}
-h1 {
-    color: #fff;
-}
-h3 {
-    color: #fff;
+    background-color: hsl(0, 0%, 86%);
 }
 table {
     background-color: #fff;

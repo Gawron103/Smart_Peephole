@@ -1,26 +1,29 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="section-content">
-            {% if current_user.is_authenticated and 
-                current_user.is_admin() %}
-            <h1 class="text-center pagination-centered">
-                Welcome admin
-            </h1>
-            <img src="{{ url_for('static', filename='img/admin_permission_granted.jpg') }}" class="img-responsive center-block" />
-            <h3 class="text-center pagination-centered">
-                Do what you want
-            </h3>
+<div class="container has-text-centered">
+    <div class="columns is-multiline is-vcentered">
+        <div class="column is-full is-full-mobile">
+            {% if current_user.is_authenticated and current_user.is_admin() %}
+            <h1 class="has-text-white text-center pagination-centered">Hi Admin</h1>
             {% else %}
-            <h1 class="text-center pagination-centered">
-                    Only admin can do admin stuff
-            </h1>
-            <img src="{{ url_for('static', filename='img/admin_no_permission.jpg') }}" class="img-responsive center-block" />
-            <h3 class="text-center pagination-centered">
-                go away
-            </h3>
+            <h1 class="title has-text-white text-center pagination-centered">Only admin can do admin stuff</h1>
+            {% endif %}
+        </div>
+        <div class="column is-full is-full-mobile">
+            <figure class="image">
+                {% if current_user.is_authenticated and current_user.is_admin() %}
+                <img src="{{ url_for('static', filename='img/admin_permission_granted.jpg') }}" class="img-responsive center-block" />
+                {% else %}
+                <img src="{{ url_for('static', filename='img/admin_no_permission.jpg') }}" class="img-responsive center-block" />
+                {% endif %}
+            </figure>
+        </div>
+        <div class="column is-full is-full-mobile">
+            {% if current_user.is_authenticated and current_user.is_admin() %}
+            <h1 class="has-text-white text-center pagination-centered">Do whatever you want</h1>
+            {% else %}
+            <h1 class="title has-text-white text-center pagination-centered">Only admin can do admin stuff</h1>
             {% endif %}
         </div>
     </div>
