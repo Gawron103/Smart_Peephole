@@ -34,7 +34,7 @@ class NormalStream:
                 self.__readyImg = cv2.imencode('.jpg', img)[1].tobytes()
 
             except Exception as error:
-                print(f'Detection stream error: {repr(error)}')
+                print(f'Normal stream error: {repr(error)}')
                 break
 
         self.__processing_thread = None

@@ -49,19 +49,19 @@ def video_stream():
 
     cam.start_thread()
 
-    return Response(
-                    gen(
-                        NormalStream(
-                            stream_event,
-                            normal_frames,
-                            FPSMeter(),
-                            LabelCreator(
-                                cv2.FONT_HERSHEY_SIMPLEX
-                            )
-                        )
-                    ),
-                    mimetype='multipart/x-mixed-replace; boundary=frame'
-                )
+    mimetype = 'multipart/x-mixed-replace; boundary=frame'
+    response = gen(
+        NormalStream(
+            stream_event,
+            normal_frames,
+            FPSMeter(),
+            LabelCreator(
+                cv2.FONT_HERSHEY_SIMPLEX
+            )
+        )
+    )
+
+    return Response(response=response, mimetype=mimetype)
 
 
 @main.route('/video_detection_stream/')
@@ -72,25 +72,24 @@ def video_detection_stream():
     cam.start_thread()
 
     face_cascade = 'haarcascade_frontalface_default.xml'
-
-    return Response(
-                    gen(
-                        DetectionStream(
-                            stream_event,
-                            detection_frames,
-                            FPSMeter(),
-                            LabelCreator(
-                                cv2.FONT_HERSHEY_SIMPLEX
-                            ),
-                            FaceDetector(
-                                cv2.CascadeClassifier(
-                                    cv2.data.haarcascades + face_cascade
-                                )
-                            )
-                        )
-                    ),
-                    mimetype='multipart/x-mixed-replace; boundary=frame'
+    mimetype = 'multipart/x-mixed-replace; boundary=frame'
+    response = gen(
+        DetectionStream(
+            stream_event,
+            detection_frames,
+            FPSMeter(),
+            LabelCreator(
+                cv2.FONT_HERSHEY_SIMPLEX
+            ),
+            FaceDetector(
+                cv2.CascadeClassifier(
+                    cv2.data.haarcascades + face_cascade
                 )
+            )
+        )
+    )
+
+    return Response(response=response, mimetype=mimetype)
 
 
 @main.route('/detection')
