@@ -13,7 +13,7 @@
 <br />
 <br />
 <p align="center">
-    <img src="images/goingOut.gif" alt="" height="450">
+    <img src="images/going_out.gif" alt="" height="450">
     <p align="center">
         See who's on the staircase!
     </p>
@@ -22,7 +22,7 @@
 <br />
 
 <p align="center">
-    <img src="images/faceDetection.gif" alt="" height="450">
+    <img src="images/face_detection.gif" alt="" height="450">
     <p align="center">
         Find the face of whoever stands in front of the door ... if you have a problem with that!
     </p>
@@ -47,22 +47,26 @@ I have used Raspberry Pi 4B 4GB, but Pi 3B should also work fine. Similar with t
 Before doing anything please remember to change startup script (run.sh). Change `xxx.xxx.x.xxx:xxxx` to your raspberry ip address. You can find it via `ifconfig`. 
 
 1. Install Python3 Virtual Environments (sudo pip3 install virtualenv)
-1. Clone repo somewhere on your Pi.
-2. Move into repo. (cd Smart_Peephole/)
-3. Create virtual environment. (python3 -m venv server/env)
-4. Activate virtual environment. (source server/env/activate)
-5. Install needed python modules. (pip install -r requirements.txt)
-6. Deactivate virtual environment. Won't need it anymore. (deactivate)
-7. Make run script exacutable. (chmod +x run.sh)
+2. Clone repo somewhere on your Pi.
+3. Move into repo. (cd Smart_Peephole/)
+4. Create virtual environment. (python3 -m venv server/env)
+5. Activate virtual environment. (source server/env/activate)
+6. Install needed python modules. (pip install -r requirements.txt)
+7. Deactivate virtual environment. Won't need it anymore. (deactivate)
+8. Make run script exacutable. (chmod +x run.sh)
+<br />
+<br />
 
 ## Starting
-Startup script already contains 
-
+Startup script is starting virtual environment and launching whole app. You only need to launch it via `./run.sh`
 
 <br />
 It is also possible to run this app at startup of Pi. It can be done by modifying .bashrc file. Put the startup script call at the bottom of the mentioned file: run.sh
 <br />
 <br />
+
+## Logging into the application
+When you log in with the following credentials -> __email:__ `admin@admin.pl` and __pw:__ `admin`, you will be able to access administrator side of the app. From this point you can create and delete accounts. Application forces you to login before allowing you to watch the stream.
 
 # Build with
 * <a href="https://flask.palletsprojects.com/en/1.1.x/">Flask</a>
