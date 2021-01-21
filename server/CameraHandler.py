@@ -57,6 +57,7 @@ class CameraHandler:
                     print('Normal stream client disconnected')
                     CameraHandler.normal_stream_last_access = None
                     streams['NormalStream'] = StreamStatus.OFFLINE
+                    self.__normalFrames.queue.clear()
 
             if CameraHandler.detection_stream_last_access is not None:
                 if time() - CameraHandler.detection_stream_last_access < 2:
@@ -66,6 +67,7 @@ class CameraHandler:
                     print('Detection stream client disconnected')
                     CameraHandler.detection_stream_last_access = None
                     streams['DetectionStream'] = StreamStatus.OFFLINE
+                    self.__detectionFrames.queue.clear()
 
             stop_transmission = (
                 any(val == StreamStatus.OFFLINE for val in streams.values())
@@ -76,8 +78,6 @@ class CameraHandler:
                 break
 
         self.__transmission_thread = None
-        self.__normalFrames.queue.clear()
-        self.__detectionFrames.queue.clear()
         imgs_iterator.close()
         print('Camera img processing ended')
 
