@@ -67,6 +67,18 @@ It is also possible to run this app at startup of Pi. It can be done by modifyin
 
 ## Logging into the application
 When you log in with the following credentials -> __email:__ `admin@admin.pl` and __pw:__ `admin`, you will be able to access administrator side of the app. From this point you can create and delete accounts. Application forces you to login before allowing you to watch the stream.
+<br />
+<br />
+
+## CPU usage
+<p align="center">
+    <img src="images/CPU_usage.png" alt="" height="500">
+    <p align="center">
+        Find the face of whoever stands in front of the door ... if you have a problem with that!
+    </p>
+</p>
+<br />
+<br />
 
 # Build with
 * <a href="https://flask.palletsprojects.com/en/1.1.x/">Flask</a>
