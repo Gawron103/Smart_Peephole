@@ -73,9 +73,6 @@ When you log in with the following credentials -> __email:__ `admin@admin.pl` an
 ## CPU usage
 <p align="center">
     <img src="images/CPU_usage.png" alt="" height="500">
-    <p align="center">
-        Find the face of whoever stands in front of the door ... if you have a problem with that!
-    </p>
 </p>
 <br />
 <br />
