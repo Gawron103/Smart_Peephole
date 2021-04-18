@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="columns is-multiline is-vcentered has-text-centered">
+    <div class="column is-full is-full-mobile">
+        <h3 class="title has-text-white">Note preview</h3>
+    </div>
+    <div class="column is-full is-full-mobile">
+        <div class="box">
+            <form action="{{ url_for('main.save_note') }}", method="post" enctype="multipart/form-data">
+                <div class="image">
+                    <img src="data:;base64,{{ frame }}">
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <input class="input is-large" type="text" name="img_desc" placeholder="Note...">
+                    </div>
+                </div>
+                <div class="field is-grouped-centered">
+                    <button class="button is-info" type="submit" name="action" value="Save">Save note</button>
+                    <button class="button is-info" type="submit" name="action" value="Exit">Discard</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

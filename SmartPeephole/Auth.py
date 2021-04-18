@@ -2,12 +2,13 @@ from flask import Blueprint, render_template, redirect, \
     url_for, session, request, flash
 from flask_login import login_user, logout_user
 
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from .Models import User
 
 auth = Blueprint('auth', __name__)
 
+from . import db
 
 @auth.route('/login')
 def login():
@@ -43,5 +44,23 @@ def logout():
 
     if session.get('was_once_logged_in'):
         del session['was_once_logged_in']
+
+    return redirect(url_for('main.index'))
+
+
+# Temporary for crearing admin user
+@auth.route('/reg')
+def reg():
+    email = 'admin@admin.pl'
+    name = 'admin'
+    password = 'admin'
+    isAdmin = True
+    detection = False
+
+    new_user = User(email=email, name=name, superUser=isAdmin, detectionState=detection, password=generate_password_hash(password, method='sha256'))
+    db.session.add(new_user)
+    db.session.commit()
+
+    print('User created')
 
     return redirect(url_for('main.index'))

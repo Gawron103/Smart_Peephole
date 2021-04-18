@@ -21,6 +21,8 @@ detection_frames = Queue()
 
 stream_event = StreamEvent()
 
+snapped_frames = dict()
+
 cam = CameraHandler(
     cv2.VideoCapture(video_source),
     stream_event,

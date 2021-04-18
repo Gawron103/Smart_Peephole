@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="columns is-multiline is-vcentered has-text-centered">
+    <div class="column is-full is-full-mobile">
+        {% if notes %}
+        <h3 class="title has-text-white">Notes preview</h3>
+    </div>
+    {% for note in notes %}
+    <div class="column is-full is-full-mobile">
+        <div class="box">
+            <form action="{{ url_for('main.delete_note') }}", method="post">
+                <div class="image">
+                    <img src="data:;base64,{{ note.img }}">
+                </div>
+                <div class="field">
+                    {{ note.desc }}
+                </div>
+                <div class="field is-centered">
+                        <button class="button is-info" type="submit" name="note_id" value="{{ note.id }}">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+        <h3 class="title has-text-white">User has no notes</h3>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
