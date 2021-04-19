@@ -2,15 +2,16 @@ from flask import render_template, redirect, Blueprint, \
     url_for, abort, request
 from flask_login import current_user
 
+from base64 import b64encode
+import numpy as np
+
 from . import db
 from .Models import User, Note
 from .Config import normal_stream, detection_stream, \
     snapped_frames
 
-from base64 import b64encode
-import numpy as np
-
 notes = Blueprint('notes', __name__)
+
 
 @notes.route('/snap')
 def snap():
@@ -71,8 +72,8 @@ def delete_note():
     if not current_user.is_authenticated:
         abort(403)
 
-    id = request.form['note_id']
-    note = Note.query.filter_by(user_id=current_user.id, id=id).first()
+    note_id = request.form['note_id']
+    note = Note.query.filter_by(user_id=current_user.id, id=note_id).first()
 
     if note:
         db.session.delete(note)
