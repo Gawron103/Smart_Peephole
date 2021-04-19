@@ -9,7 +9,7 @@
     {% for note in notes %}
     <div class="column is-full is-full-mobile">
         <div class="box">
-            <form action="{{ url_for('main.delete_note') }}", method="post">
+            <form action="{{ url_for('notes.delete_note') }}", method="post">
                 <div class="image">
                     <img src="data:;base64,{{ note.img }}">
                 </div>

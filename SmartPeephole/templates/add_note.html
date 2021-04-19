@@ -7,7 +7,7 @@
     </div>
     <div class="column is-full is-full-mobile">
         <div class="box">
-            <form action="{{ url_for('main.save_note') }}", method="post" enctype="multipart/form-data">
+            <form action="{{ url_for('notes.save_note') }}", method="post" enctype="multipart/form-data">
                 <div class="image">
                     <img src="data:;base64,{{ frame }}">
                 </div>

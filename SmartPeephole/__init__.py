@@ -73,4 +73,8 @@ def create_app():
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    # Blueprint for notes parts of app
+    from .Notes import notes as notes_blueprint
+    app.register_blueprint(notes_blueprint)
+
     return app
