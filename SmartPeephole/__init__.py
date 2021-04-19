@@ -73,8 +73,12 @@ def create_app():
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
-    # Blueprint for notes parts of app
+    # Blueprint for notes part of app
     from .Notes import notes as notes_blueprint
     app.register_blueprint(notes_blueprint)
+
+    # Blueprint for video stream part of app
+    from .Stream import stream as stream_blueprint
+    app.register_blueprint(stream_blueprint)
 
     return app

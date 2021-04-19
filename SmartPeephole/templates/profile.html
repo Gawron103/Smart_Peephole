@@ -8,10 +8,10 @@
     <div class="column is-full is-full-mobile">
         <figure class="image">
             {% if not current_user.detectionState %}
-            <img src="{{ url_for('main.video_stream') }}">
+            <img src="{{ url_for('stream.stream_normal_video') }}">
             {% endif %}
             {% if current_user.detectionState %}
-            <img src="{{ url_for('main.video_detection_stream') }}">
+            <img src="{{ url_for('stream.stream_video_with_detection') }}">
             {% endif %}
         </figure>
     </div>
@@ -24,7 +24,7 @@
         {% endif %}
     </div>
     <div class="column is-full is-full-mobile">
-        <form action="detection">
+        <form action="detection_state_change">
             <button class="button is-info" type="submit">Enable/Disable detection state</button>
         </form>
     </div>
