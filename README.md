@@ -1,7 +1,7 @@
 # Smart_Peephole
 
 <p align="center">
-    <img src="server/static/img/logo.svg" alt="Logo" width="800">
+    <img src="SmartPeephole/static/img/logo.svg" alt="Logo" width="800">
     <h3 align="center"><strong>Smart Peephole</strong></h3>
 
 <p align="center">
@@ -62,6 +62,14 @@ Startup script is starting virtual environment and launching whole app. You only
 
 <br />
 It is also possible to run this app at startup of Pi. It can be done by modifying .bashrc file. Put the startup script call at the bottom of the mentioned file: run.sh
+<br />
+<br />
+
+## Functionality
+Main goal was to allow user to see live feed from camera mounted on door. Besides that SmartPeephole is able to do a couple more things:
+* Detects face on live stream feed  (not face recognition)
+* Allows to create accounts for multiple users and remembers their settings
+* Allows users to create notes - photos from camera with description
 <br />
 <br />
 
